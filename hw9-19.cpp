@@ -3,7 +3,7 @@
 #include <iomanip>
 using namespace std;
 
-double getPayment(int, double, int);
+double getPayment(int prin, double monthRate, int months);
 
 int main()
 {
@@ -30,9 +30,9 @@ int main()
     creditPayment = getPayment(carPrice - rebate, creditRate / 12, term * 12);
     dealerPayment = getPayment(carPrice, dealerRate / 12, term * 12);
 
-    // Check for errors in payment calculation
+    // Check if either payment calculation returned -1 (indicating an error in the formula)
     if (creditPayment == -1 || dealerPayment == -1) {
-        cout << "Error: Invalid loan rates (denominator in formula is 0)." << endl;
+        cout << "Error: Invalid loan parameters (denominator in formula is 0)." << endl;
     } else {
         // Output the monthly payments
         cout << fixed << setprecision(2) << endl;
@@ -53,13 +53,17 @@ int main()
 double getPayment(int prin, double monthRate, int months)
 {
     double monthPay = 0.0;
-    
+
     // Check if the denominator in the payment formula is zero
-    if (1 - pow(monthRate + 1, -months) == 0) {
+    double denominator = (1 - pow(1 + monthRate, -months)); // The original formula's denominator
+
+    // If denominator is zero, return -1 to indicate an error
+    if (denominator == 0) {
         return -1; // Return -1 if denominator is zero
     }
-    
-    // Calculate the monthly payment
-    monthPay = prin * monthRate / (1 - pow(monthRate + 1, -months));
+
+    // Calculate the monthly payment using the corrected formula
+    monthPay = prin * monthRate / denominator;
+
     return monthPay;
 }
