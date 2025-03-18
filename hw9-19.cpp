@@ -3,6 +3,7 @@
 #include <iomanip>
 using namespace std;
 
+// Function prototype to calculate the monthly payment
 double getPayment(int prin, double monthRate, int months);
 
 int main()
@@ -15,6 +16,7 @@ int main()
     double creditPayment = 0.0;
     double dealerPayment = 0.0;
 
+    // Get inputs from the user
     cout << "Car price (after any trade-in): ";
     cin >> carPrice;
     cout << "Rebate: ";
@@ -26,7 +28,7 @@ int main()
     cout << "Term in years: ";
     cin >> term;
 
-    // Calculate monthly payments
+    // Calculate monthly payments for both options
     creditPayment = getPayment(carPrice - rebate, creditRate / 12, term * 12);
     dealerPayment = getPayment(carPrice, dealerRate / 12, term * 12);
 
@@ -45,6 +47,7 @@ int main()
     return 0;
 }
 
+// Function definition to calculate the monthly payment
 double getPayment(int prin, double monthRate, int months)
 {
     double monthPay = 0.0;
@@ -57,6 +60,7 @@ double getPayment(int prin, double monthRate, int months)
     // Normal case for non-zero interest rate
     double denominator = 1 - pow(1 + monthRate, -months);
 
+    // Calculate monthly payment using the formula
     monthPay = prin * monthRate / denominator;
 
     return monthPay;
