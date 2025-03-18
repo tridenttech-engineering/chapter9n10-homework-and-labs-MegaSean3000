@@ -19,9 +19,9 @@ int main()
     cin >> carPrice;
     cout << "Rebate: ";
     cin >> rebate;
-    cout << "Credit union rate: ";
+    cout << "Credit union rate (as a decimal): ";
     cin >> creditRate;
-    cout << "Dealer rate: ";
+    cout << "Dealer rate (as a decimal): ";
     cin >> dealerRate;
     cout << "Term in years: ";
     cin >> term;
@@ -54,15 +54,19 @@ double getPayment(int prin, double monthRate, int months)
 {
     double monthPay = 0.0;
 
-    // Check if the denominator in the payment formula is zero
-    double denominator = (1 - pow(1 + monthRate, -months)); // The original formula's denominator
-
-    // If denominator is zero, return -1 to indicate an error
-    if (denominator == 0) {
-        return -1; // Return -1 if denominator is zero
+    // If the interest rate is 0 (monthRate is 0), the formula simplifies
+    if (monthRate == 0) {
+        return prin / months;  // Monthly payment is just the principal divided by months
     }
 
-    // Calculate the monthly payment using the corrected formula
+    // Normal case for non-zero interest rate
+    double denominator = 1 - pow(1 + monthRate, -months);
+
+    // If the denominator is zero (this should never really happen unless inputs are malformed)
+    if (denominator == 0) {
+        return -1;  // Return -1 to indicate an error
+    }
+
     monthPay = prin * monthRate / denominator;
 
     return monthPay;
